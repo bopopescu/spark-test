@@ -19,6 +19,7 @@ package org.apache.spark.sql.execution.joins
 
 import java.util.{HashMap => JavaHashMap}
 
+import org.apache.spark.rdd.RDD
 import scala.collection.JavaConversions._
 
 import org.apache.spark.annotation.DeveloperApi
@@ -66,7 +67,7 @@ case class BroadcastHashOuterJoin(
     case x => throw new Exception(s"HashOuterJoin should not take $x as the JoinType")
   }
 
-  override def output = {
+  override def output: Seq[Attribute] = {
     joinType match {
       case LeftOuter =>
         left.output ++ right.output.map(_.withNullability(true))
@@ -105,7 +106,7 @@ case class BroadcastHashOuterJoin(
     hashTable
   }
 
-  override def execute() = {
+  override def doExecute: RDD[Row] = {
     val input: Array[Row] = broadcastPlan.execute().map(_.copy()).collect()
     val hashed = buildHashTable(input.iterator, BroadcastSideKeyGenerator)
     val broadcastHashTable = sparkContext.broadcast(hashed)

@@ -408,10 +408,11 @@ class JoinSuite extends QueryTest with BeforeAndAfterEach {
   test("broadcasted hash outer join operator selection") {
     clearCache()
     sql("CACHE TABLE testData")
-    val tmp = autoBroadcastJoinThreshold
+    val tmp = conf.autoBroadcastJoinThreshold
 
     Seq(
-      ("SELECT * FROM testData2 LEFT outer JOIN testData ON key = a", classOf[BroadcastHashOuterJoin]),
+      ("SELECT * FROM testData2 LEFT outer JOIN testData ON key = a",
+        classOf[BroadcastHashOuterJoin]),
       ("SELECT * FROM testData RIGHT outer JOIN testData2 ON key = a where key = 2",
         classOf[BroadcastHashOuterJoin]),
       ("SELECT * FROM testData full outer join testData2 ON key = a", classOf[HashOuterJoin])
