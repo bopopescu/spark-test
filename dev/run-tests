@@ -55,7 +55,7 @@ function handle_error () {
   fi
 }
 
-export SBT_MAVEN_PROFILES_ARGS="$SBT_MAVEN_PROFILES_ARGS -Pkinesis-asl"
+export SBT_MAVEN_PROFILES_ARGS="$SBT_MAVEN_PROFILES_ARGS -Pkinesis-asl -Psparkr"
 
 # Determine Java path and version.
 {
